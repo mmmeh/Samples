@@ -39,7 +39,6 @@
  *             include file :
  *
  *****************************************/
-#include <iostream>
 #include <stdlib.h>
 #include <curses.h>
 #include <string.h>
@@ -475,20 +474,20 @@ void commandReceived (eARCONTROLLER_DICTIONARY_KEY commandKey, ARCONTROLLER_DICT
                                 if (arg != NULL)
                                 {
                                     double latitude = arg->value.Double;
-                                    std::cout << "Latitude: " + latitude << std::endl;
+                                    mvprintw(row-8,0,"Latitude: %d\n", latitude);
 
                                 }
                                 HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_LONGITUDE, arg);
                                 if (arg != NULL)
                                 {
                                     double longitude = arg->value.Double;
-                                  std::cout << "Longitude: " + longitude << std::endl;
+                                    mvprintw(row-9,0,"Longitude: %d\n", longitude);
                                 }
                                 HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_ALTITUDE, arg);
                                 if (arg != NULL)
                                 {
                                     double altitude = arg->value.Double;
-                                    std::cout << "Altitude: " + altitude << std::endl;
+                                    mvprintw(row-10,0,"Longitude: %d\n", altitude);
                                 }
                             }
                         }
