@@ -343,8 +343,7 @@ int main (int argc, char *argv[])
 
     if (!failed)
     {
-        IHM_PrintInfo(ihm, "Running ... ('t' to takeoff ; Spacebar to land ; 'e' for emergency ; Arrow keys and ('r','f','d','g') to move ; 'q' to quit)");
-
+        IHM_PrintInfo(ihm, "Running ... \nT \t\tTakeoff\nSpace \t\tLand\nE \t\tEmergency\nArrow Keys \tElevation & Rotation\nR F D G \tNavigate\nQ \t\tQuit\n");
 #ifdef IHM
         while (gIHMRun)
         {
