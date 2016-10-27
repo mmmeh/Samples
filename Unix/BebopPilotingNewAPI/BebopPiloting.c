@@ -39,7 +39,7 @@
  *             include file :
  *
  *****************************************/
-
+#include <iostream>
 #include <stdlib.h>
 #include <curses.h>
 #include <string.h>
@@ -465,6 +465,38 @@ void commandReceived (eARCONTROLLER_DICTIONARY_KEY commandKey, ARCONTROLLER_DICT
                         // update UI
                         batteryStateChanged (arg->value.U8);
                     }
+                      if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED) && (elementDictionary != NULL))
+                        {
+                            ARCONTROLLER_DICTIONARY_ARG_t *arg = NULL;
+                            ARCONTROLLER_DICTIONARY_ELEMENT_t *element = NULL;
+                            HASH_FIND_STR (elementDictionary, ARCONTROLLER_DICTIONARY_SINGLE_KEY, element);
+                            if (element != NULL)
+                            {
+                                HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_LATITUDE, arg);
+                                if (arg != NULL)
+                                {
+                                    double latitude = arg->value.Double;
+                                    std::cout << "Latitude: " + latitude << std::endl;
+
+                                }
+                                HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_LONGITUDE, arg);
+                                if (arg != NULL)
+                                {
+                                    double longitude = arg->value.Double;
+                                  std::cout << "Longitude: " + longitude << std::endl;
+                                }
+                                HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_ALTITUDE, arg);
+                                if (arg != NULL)
+                                {
+                                    double altitude = arg->value.Double;
+                                    std::cout << "Altitude: " + altitude << std::endl;
+                                }
+                            }
+                        }
+                      else
+                      {
+                        // Do Nothing
+                      }
                     else
                     {
                         ARSAL_PRINT(ARSAL_PRINT_ERROR, TAG, "arg is NULL");
