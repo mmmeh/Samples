@@ -305,7 +305,7 @@ void IHM_PrintBattery(IHM_t *ihm, uint8_t percent)
     {
         move(BATTERY_Y, 0);     // move to begining of line
         clrtoeol();             // clear line
-        mvprintw(BATTERY_Y, BATTERY_X, "Battery: %d", percent);
+        mvprintw(BATTERY_Y, BATTERY_X, "[Battery]: %d", percent);
     }
 }
 
