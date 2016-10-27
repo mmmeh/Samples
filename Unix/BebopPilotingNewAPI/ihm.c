@@ -236,28 +236,28 @@ void *IHM_InputProcessing(void *data)
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_LAND, ihm->customData);
                 }
             }
-            else if(key == 'r')
+            else if(key == 'w')
             {
                 if(ihm->onInputEventCallback != NULL)
                 {
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_FORWARD, ihm->customData);
                 }
             }
-            else if(key == 'f')
+            else if(key == 's')
             {
                 if(ihm->onInputEventCallback != NULL)
                 {
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_BACK, ihm->customData);
                 }
             }
-            else if(key == 'd')
+            else if(key == 'a')
             {
                 if(ihm->onInputEventCallback != NULL)
                 {
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_ROLL_LEFT, ihm->customData);
                 }
             }
-            else if(key == 'g')
+            else if(key == 'd')
             {
                 if(ihm->onInputEventCallback != NULL)
                 {
