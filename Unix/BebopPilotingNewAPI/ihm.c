@@ -215,7 +215,7 @@ void *IHM_InputProcessing(void *data)
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_RIGHT, ihm->customData);
                 }
             }
-            else if(key == 'e')
+            else if(key == 'k')
             {
                 if(ihm->onInputEventCallback != NULL)
                 {
