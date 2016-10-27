@@ -343,7 +343,7 @@ int main (int argc, char *argv[])
 
     if (!failed)
     {
-        IHM_PrintInfo(ihm, "Running ... \nT \t\tTakeoff\nSpace \t\tLand\nE \t\tEmergency\nArrow Keys \tElevation & Rotation\nR F D G \tNavigate\nQ \t\tQuit\n");
+        IHM_PrintInfo(ihm, "Running ... \nT \t\tTakeoff\nSpace \t\tLand\nK \t\tEmergency\nArrow Keys \tElevation & Rotation\nW A S D \tNavigate\nQ \t\tQuit\n");
 #ifdef IHM
         while (gIHMRun)
         {
