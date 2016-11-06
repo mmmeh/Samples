@@ -330,7 +330,7 @@ void IHM_PrintData(IHM_t *ihm, double longitude, double latitude, double altitud
 
 void IHM_OutputLog(IHM_t *ihm, char *logValue, int offset)
 {
-if (ihm != NULL
+if (ihm != NULL)
     {
 	    move(LOG_Y + offset, LOG_X);
 	    clrtoeol();
