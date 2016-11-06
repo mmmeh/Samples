@@ -105,6 +105,8 @@ float speedX = 0;
 float speedY = 0;
 float speedZ = 0;
 
+int offset = 0;
+
 static void signal_handler(int signal)
 {
     gIHMRun = 0;
@@ -597,7 +599,6 @@ void positionStateChanged(double latitude, double longitude, double altitude, fl
     }
 }
 
-
 void batteryStateChanged (uint8_t percent)
 {
     // callback of changing of battery level
@@ -687,6 +688,8 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         {
             // send a takeoff command to the drone
             error = deviceController->aRDrone3->sendPilotingLanding(deviceController->aRDrone3);
+	    IHM_OutputLog(ihm, "Landing", offset);
+	    offset++;
         }
         break;
     case IHM_INPUT_EVENT_TAKEPICTURE:
@@ -694,6 +697,8 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         {
             // tell drone to capture image
             error = deviceController->aRDrone3->sendMediaRecordPicture(deviceController->aRDrone3, 0);
+	    IHM_OutputLog(ihm, "Taking picture", offset);
+	    offset++;
         }
         break;
     case IHM_INPUT_EVENT_TAKEOFF:
@@ -701,6 +706,8 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         {
             // send a landing command to the drone
             error = deviceController->aRDrone3->sendPilotingTakeOff(deviceController->aRDrone3);
+	    IHM_OutputLog(ihm, "Taking off", offset);
+	    offset++;
         }
         break;
     case IHM_INPUT_EVENT_UP:
