@@ -58,10 +58,16 @@
 #define HEADER_Y 0
 
 #define INFO_X 0
-#define INFO_Y 2
+#define INFO_Y 4
 
 #define BATTERY_X 0
-#define BATTERY_Y 4
+#define BATTERY_Y 11
+
+#define DATA_X 0
+#define DATA_Y 13
+
+#define LOG_X 0
+#define LOG_Y 15
 
 /*****************************************
  *
@@ -222,6 +228,13 @@ void *IHM_InputProcessing(void *data)
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_EMERGENCY, ihm->customData);
                 }
             }
+            else if(key == 'p')
+            {
+                if(ihm->onInputEventCallback != NULL)
+                {
+                    ihm->onInputEventCallback (IHM_INPUT_EVENT_TAKEPICTURE, ihm->customData);
+                }
+            }
             else if(key == 't')
             {
                 if(ihm->onInputEventCallback != NULL)
@@ -300,6 +313,18 @@ void IHM_PrintInfo(IHM_t *ihm, char *infoStr)
         mvprintw(INFO_Y, INFO_X, infoStr);
     }
 }
+
+void IHM_PrintData(IHM_t *ihm, double longitude, double latitude, double altitude, float speedX, float speedY, float speedZ)
+{
+  if (ihm != NULL)
+    {
+      move(DATA_Y, 0);
+      clrtoeol();
+      mvprintw(DATA_Y, DATA_X, "Longitude: %f\nLatitude: %f\nAltitude: %f\n\nSpeedX: %f\nSpeedY: %f \nSpeedZ: %f", longitude, latitude, altitude, speedX, speedY, speedZ);
+      
+    }
+}
+
 
 void IHM_PrintBattery(IHM_t *ihm, uint8_t percent)
 {
