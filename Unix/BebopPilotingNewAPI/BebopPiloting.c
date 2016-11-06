@@ -353,8 +353,12 @@ int main (int argc, char *argv[])
 
     if (!failed)
     {
-        IHM_PrintInfo(ihm, "Running ... \n\t't' to takeoff \n\t Spacebar to land \n\t 'k' for emergency \n\t Arrow keys and W A S D to move \n\t 'q' to quit");
-;
+	 error = deviceController->aRDrone3->sendPictureSettingsVideoAutorecordSelection(deviceController->aRDrone3, (uint8_t)disabled, (uint8_t)mass_storage_id); // disables auto-record
+
+        IHM_PrintInfo(ihm, "\t't' to takeoff \n\t Spacebar to land \n\t 'k' for emergency \n\t Arrow keys and W A S D to move \n\t 'q' to quit");
+    	IHM_OutputLog(ihm, "Running", offset);
+	offset++;
+    }
 
 #ifdef IHM
         while (gIHMRun)
