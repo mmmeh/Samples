@@ -66,8 +66,10 @@
 #define DATA_X 0
 #define DATA_Y 13
 
-#define LOG_X 0
+#define LOG_X 10
 #define LOG_Y 15
+
+#define OFFSET 0
 
 /*****************************************
  *
@@ -322,6 +324,17 @@ void IHM_PrintData(IHM_t *ihm, double longitude, double latitude, double altitud
       clrtoeol();
       mvprintw(DATA_Y, DATA_X, "Longitude: %f\nLatitude: %f\nAltitude: %f\n\nSpeedX: %f\nSpeedY: %f \nSpeedZ: %f", longitude, latitude, altitude, speedX, speedY, speedZ);
       
+    }
+}
+
+
+void IHM_OutputLog(IHM_t *ihm, char *logValue, int offset)
+{
+if (ihm != NULL
+    {
+	    move(LOG_Y + offset, LOG_X);
+	    clrtoeol();
+	    mvprintw(LOG_Y + offset, LOG_X, logValue);
     }
 }
 
