@@ -97,6 +97,14 @@ int frameNb = 0;
 ARSAL_Sem_t stateSem;
 int isBebop2 = 0;
 
+double latitude = 0;
+double longitude = 0;
+double altitude = 0;
+
+float speedX = 0;
+float speedY = 0;
+float speedZ = 0;
+
 static void signal_handler(int signal)
 {
     gIHMRun = 0;
@@ -343,7 +351,8 @@ int main (int argc, char *argv[])
 
     if (!failed)
     {
-        IHM_PrintInfo(ihm, "Running ... (\t't' to takeoff \n\t Spacebar to land \n\t 'k' for emergency \n\t Arrow keys and W A S D to move \n\t 'q' to quit)");
+        IHM_PrintInfo(ihm, "Running ... \n\t't' to takeoff \n\t Spacebar to land \n\t 'k' for emergency \n\t Arrow keys and W A S D to move \n\t 'q' to quit");
+;
 
 #ifdef IHM
         while (gIHMRun)
@@ -481,7 +490,59 @@ void commandReceived (eARCONTROLLER_DICTIONARY_KEY commandKey, ARCONTROLLER_DICT
             }
         }
     }
+    // get longitude / latitude / altitude
+if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED) && (elementDictionary != NULL))
+    {
+        ARCONTROLLER_DICTIONARY_ARG_t *arg = NULL;
+        ARCONTROLLER_DICTIONARY_ELEMENT_t *element = NULL;
+        HASH_FIND_STR (elementDictionary, ARCONTROLLER_DICTIONARY_SINGLE_KEY, element);
+        if (element != NULL)
+        {
+            HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_LATITUDE, arg);
+            if (arg != NULL)
+            {
+                latitude = arg->value.Double;
+            }
+            HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_LONGITUDE, arg);
+            if (arg != NULL)
+            {
+                longitude = arg->value.Double;
+            }
+            HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_POSITIONCHANGED_ALTITUDE, arg);
+            if (arg != NULL)
+            {
+                altitude = arg->value.Double;
+            }
+	    positionStateChanged(latitude, longitude, altitude);
+        }
+    }
 
+// get Drone's speed values
+    if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_SPEEDCHANGED) && (elementDictionary != NULL))
+    {
+        ARCONTROLLER_DICTIONARY_ARG_t *arg = NULL;
+        ARCONTROLLER_DICTIONARY_ELEMENT_t *element = NULL;
+        HASH_FIND_STR (elementDictionary, ARCONTROLLER_DICTIONARY_SINGLE_KEY, element);
+        if (element != NULL)
+        {
+            HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_SPEEDCHANGED_SPEEDX, arg);
+            if (arg != NULL)
+            {
+                 speedX = arg->value.Float;
+            }
+            HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_SPEEDCHANGED_SPEEDY, arg);
+            if (arg != NULL)
+            {
+                 speedY = arg->value.Float;
+            }
+            HASH_FIND_STR (element->arguments, ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_SPEEDCHANGED_SPEEDZ, arg);
+            if (arg != NULL)
+            {
+                 speedZ = arg->value.Float;
+            }
+        }
+    }
+   
     if (commandKey == ARCONTROLLER_DICTIONARY_KEY_COMMON_COMMONSTATE_SENSORSSTATESLISTCHANGED)
     {
         ARCONTROLLER_DICTIONARY_ARG_t *arg = NULL;
@@ -527,6 +588,15 @@ void commandReceived (eARCONTROLLER_DICTIONARY_KEY commandKey, ARCONTROLLER_DICT
         }
     }
 }
+
+void positionStateChanged(double latitude, double longitude, double altitude, float speedX, float speedY, float speedZ)
+{
+  if (ihm != NULL)
+    {
+      IHM_PrintData(ihm, latitude, longitude, altitude, speedX, speedY, speedZ);
+    }
+}
+
 
 void batteryStateChanged (uint8_t percent)
 {
@@ -617,6 +687,13 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         {
             // send a takeoff command to the drone
             error = deviceController->aRDrone3->sendPilotingLanding(deviceController->aRDrone3);
+        }
+        break;
+    case IHM_INPUT_EVENT_TAKEPICTURE:
+        if(deviceController != NULL)
+        {
+            // tell drone to capture image
+            error = deviceController->aRDrone3->sendMediaRecordPicture(deviceController->aRDrone3, 0);
         }
         break;
     case IHM_INPUT_EVENT_TAKEOFF:
