@@ -50,6 +50,7 @@
 #include <libARSAL/ARSAL.h>
 #include <libARController/ARController.h>
 #include <libARDiscovery/ARDiscovery.h>
+#include <libARMavlink/ARMAVLINK_MissionItemUtils.h>
 
 #include "BebopPiloting.h"
 #include "ihm.h"
@@ -708,6 +709,24 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
             error = deviceController->aRDrone3->sendMediaRecordPicture(deviceController->aRDrone3, 0);
 	    IHM_PrintLog(ihm, "Capturing Image", offset);
 	    offset++;
+		
+		// set up mavlink file
+		mavlink_mission_item_t item;
+        	eARMAVLINK_ERROR errorM;
+		
+		ARMAVLINK_FileGenerator_t *generator =  ARMAVLINK_FileGenerator_New(&error);
+		
+		errorM = ARMAVLINK_MissionItemUtils_CreateMavlinkTakeoffMissionItem(&item, 41.777217, -88.234855, 50, 180, 100);
+        	errorM = ARMAVLINK_FileGenerator_AddMissionItem(generator, &item);
+		
+	        errorM = ARMAVLINK_MissionItemUtils_CreateMavlinkDelay(&item, 10);
+       		errorM = ARMAVLINK_FileGenerator_AddMissionItem(generator, &item);
+		
+		errorM = ARMAVLINK_MissionItemUtils_CreateMavlinkNavWaypointMissionItem(&item, 41.777855, -88.234908, 50, 0);
+        	errorM = ARMAVLINK_FileGenerator_AddMissionItem(generator, &item);
+		
+		ARMAVLINK_FileGenerator_CreateMavlinkFile(generator, "mav1.csv");
+	
         }
 
 	//deviceController->aRDrone3->sendMediaRecordVideoV2(deviceController->aRDrone3, (eARCOMMANDS_ARDRONE3_MEDIARECORD_VIDEOV2_RECORD)record); add video recording functionality w/ toggle in ihm 
