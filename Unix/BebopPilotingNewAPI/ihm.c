@@ -64,12 +64,10 @@
 #define BATTERY_Y 11
 
 #define DATA_X 0
-#define DATA_Y 13
+#define DATA_Y 14
 
-#define LOG_X 10
-#define LOG_Y 15
-
-#define OFFSET 0
+#define LOG_X 0
+#define LOG_Y 20
 
 /*****************************************
  *
@@ -327,14 +325,17 @@ void IHM_PrintData(IHM_t *ihm, double longitude, double latitude, double altitud
     }
 }
 
-
-void IHM_OutputLog(IHM_t *ihm, char *logValue, int offset)
+void IHM_PrintLog(IHM_t *ihm, char *logStr, int offset)
 {
-if (ihm != NULL)
+  if (ihm != NULL)
     {
-	    move(LOG_Y + offset, LOG_X);
-	    clrtoeol();
-	    mvprintw(LOG_Y + offset, LOG_X, logValue);
+      move(LOG_Y, 0);
+      clrtoeol();
+      mvprintw(LOG_Y, LOG_X, "Log\n------------------");
+
+      move(LOG_Y + offset, LOG_X);
+      clrtoeol();
+      mvprintw(LOG_Y + offset, LOG_X, logStr);
     }
 }
 
