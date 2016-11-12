@@ -353,12 +353,15 @@ int main (int argc, char *argv[])
 
     if (!failed)
     {
-	 error = deviceController->aRDrone3->sendPictureSettingsVideoAutorecordSelection(deviceController->aRDrone3, (uint8_t)disabled, (uint8_t)mass_storage_id); // disables auto-record
-
-        IHM_PrintInfo(ihm, "\t't' to takeoff \n\t Spacebar to land \n\t 'k' for emergency \n\t Arrow keys and W A S D to move \n\t 'q' to quit");
-    	IHM_OutputLog(ihm, "Running", offset);
+        IHM_PrintInfo(ihm, "\n't' to takeoff \n Spacebar to land \n'k' for emergency \n Arrow keys and W A S D to move \n 'q' to quit");
+	IHM_PrintLog(ihm, "Running", offset);
 	offset++;
-    }
+
+	uint8_t mass_storage_id = 0;
+       
+	error = deviceController->aRDrone3->sendPictureSettingsVideoAutorecordSelection(deviceController->aRDrone3, (uint8_t)0, (uint8_t)mass_storage_id);
+
+;
 
 #ifdef IHM
         while (gIHMRun)
@@ -603,6 +606,7 @@ void positionStateChanged(double latitude, double longitude, double altitude, fl
     }
 }
 
+
 void batteryStateChanged (uint8_t percent)
 {
     // callback of changing of battery level
@@ -680,7 +684,7 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         IHM_PrintInfo(ihm, "IHM_INPUT_EVENT_EXIT ...");
         gIHMRun = 0;
         break;
-    case IHM_INPUT_EVENT_EMERGENCY:
+     case IHM_INPUT_EVENT_EMERGENCY:
         if(deviceController != NULL)
         {
             // send a Emergency command to the drone
@@ -692,8 +696,9 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         {
             // send a takeoff command to the drone
             error = deviceController->aRDrone3->sendPilotingLanding(deviceController->aRDrone3);
-	    IHM_OutputLog(ihm, "Landing", offset);
+	    IHM_PrintLog(ihm, "Landing", offset);
 	    offset++;
+
         }
         break;
     case IHM_INPUT_EVENT_TAKEPICTURE:
@@ -701,16 +706,20 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         {
             // tell drone to capture image
             error = deviceController->aRDrone3->sendMediaRecordPicture(deviceController->aRDrone3, 0);
-	    IHM_OutputLog(ihm, "Taking picture", offset);
+	    IHM_PrintLog(ihm, "Capturing Image", offset);
 	    offset++;
         }
+
+	//deviceController->aRDrone3->sendMediaRecordVideoV2(deviceController->aRDrone3, (eARCOMMANDS_ARDRONE3_MEDIARECORD_VIDEOV2_RECORD)record); add video recording functionality w/ toggle in ihm 
+
+
         break;
     case IHM_INPUT_EVENT_TAKEOFF:
         if(deviceController != NULL)
         {
             // send a landing command to the drone
             error = deviceController->aRDrone3->sendPilotingTakeOff(deviceController->aRDrone3);
-	    IHM_OutputLog(ihm, "Taking off", offset);
+	    IHM_PrintLog(ihm, "Taking off", offset);
 	    offset++;
         }
         break;
