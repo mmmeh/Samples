@@ -354,7 +354,8 @@ int main (int argc, char *argv[])
 
     if (!failed)
     {
-        IHM_PrintInfo(ihm, "\n't' to takeoff \n Spacebar to land \n'k' for emergency \n Arrow keys and W A S D to move \n 'q' to quit");
+      	IHM_PrintInfo(ihm, "**************************************\nT\t\t - Takeoff\nSPACEBAR\t - Land\nK\t\t - Emergency Landing\nARROW KEYS\t - Rotate\nWASD\t\t - Fly (2D)\nQ\t\t - Quit\n**************************************");
+        //IHM_PrintInfo(ihm, "\n't' to takeoff \n Spacebar to land \n'k' for emergency \n Arrow keys and W A S D to move \n 'q' to quit");
 	IHM_PrintLog(ihm, "Running", offset);
 	offset++;
 
@@ -471,7 +472,7 @@ void commandReceived (eARCONTROLLER_DICTIONARY_KEY commandKey, ARCONTROLLER_DICT
 
             if (elementDictionary != NULL)
             {
-                // get the command received in the device controller
+               // get the command received in the device controller
                 HASH_FIND_STR (elementDictionary, ARCONTROLLER_DICTIONARY_SINGLE_KEY, singleElement);
 
                 if (singleElement != NULL)
@@ -709,7 +710,7 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
             error = deviceController->aRDrone3->sendMediaRecordPicture(deviceController->aRDrone3, 0);
 	    IHM_PrintLog(ihm, "Capturing Image", offset);
 	    offset++;
-		
+	    /*
 		// set up mavlink file
 		mavlink_mission_item_t item;
         	eARMAVLINK_ERROR errorM;
@@ -726,7 +727,7 @@ void onInputEvent (eIHM_INPUT_EVENT event, void *customData)
         	errorM = ARMAVLINK_FileGenerator_AddMissionItem(generator, &item);
 		
 		ARMAVLINK_FileGenerator_CreateMavlinkFile(generator, "mav1.csv");
-	
+	    */
         }
 
 	//deviceController->aRDrone3->sendMediaRecordVideoV2(deviceController->aRDrone3, (eARCOMMANDS_ARDRONE3_MEDIARECORD_VIDEOV2_RECORD)record); add video recording functionality w/ toggle in ihm 
