@@ -57,17 +57,20 @@
 #define HEADER_X 0
 #define HEADER_Y 0
 
+//#define COLWIDTH  6
+//#define COLCOUNT  0
+
 #define INFO_X 0
-#define INFO_Y 4
+#define INFO_Y 2
 
 #define BATTERY_X 0
-#define BATTERY_Y 11
+#define BATTERY_Y 10
 
 #define DATA_X 0
-#define DATA_Y 14
+#define DATA_Y 12
 
-#define LOG_X 0
-#define LOG_Y 20
+#define LOG_X 40
+#define LOG_Y 0
 
 /*****************************************
  *
@@ -198,6 +201,8 @@ void *IHM_InputProcessing(void *data)
                 if(ihm->onInputEventCallback != NULL)
                 {
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_UP, ihm->customData);
+		    // Have it call another function which stores this keypress into an array to later be replayed
+		    //ihm->onPInputEventCallback (IHM_INPUT_STOREKEY, ihm->customData);
                 }
             }
             else if(key == KEY_DOWN)
@@ -228,6 +233,13 @@ void *IHM_InputProcessing(void *data)
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_EMERGENCY, ihm->customData);
                 }
             }
+            else if(key == 'm')
+            {
+                if(ihm->onInputEventCallback != NULL)
+                {
+                    ihm->onInputEventCallback (IHM_INPUT_EVENT_MOVERELATIVE, ihm->customData);
+                }
+            }
             else if(key == 'p')
             {
                 if(ihm->onInputEventCallback != NULL)
@@ -240,14 +252,14 @@ void *IHM_InputProcessing(void *data)
                 if(ihm->onInputEventCallback != NULL)
                 {
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_TAKEOFF, ihm->customData);
-					IHM_PrintInfo(ihm, "Taking off ...");
+		    //IHM_PrintInfo(ihm, "Taking off ...");
                 }
             }
             else if(key == ' ')
             {
                 if(ihm->onInputEventCallback != NULL)
                 {
-					IHM_PrintInfo(ihm, "Landing ...");
+		  //IHM_PrintInfo(ihm, "Landing ...");
                     ihm->onInputEventCallback (IHM_INPUT_EVENT_LAND, ihm->customData);
                 }
             }
@@ -294,6 +306,7 @@ void *IHM_InputProcessing(void *data)
     return NULL;
 }
 
+
 void IHM_PrintHeader(IHM_t *ihm, char *headerStr)
 {
     if (ihm != NULL)
@@ -318,9 +331,14 @@ void IHM_PrintData(IHM_t *ihm, double longitude, double latitude, double altitud
 {
   if (ihm != NULL)
     {
-      move(DATA_Y, 0);
+      move(DATA_Y, DATA_X);
+      mvprintw(DATA_Y, DATA_X, "**************************************");
+      move(DATA_Y, DATA_X);
       clrtoeol();
-      mvprintw(DATA_Y, DATA_X, "Longitude: %f\nLatitude: %f\nAltitude: %f\n\nSpeedX: %f\nSpeedY: %f \nSpeedZ: %f", longitude, latitude, altitude, speedX, speedY, speedZ);
+
+      mvprintw(DATA_Y, DATA_X, "Longitude: %f\nLatitude: %f\nAltitude: %f\n\nX-Speed: %f\nY-Speed: %f \nZ-Speed %f", longitude, latitude, altitude, speedX, speedY, speedZ);
+      move(19, 0);
+      mvprintw(19, 0, "**************************************");
       
     }
 }
@@ -328,13 +346,21 @@ void IHM_PrintData(IHM_t *ihm, double longitude, double latitude, double altitud
 void IHM_PrintLog(IHM_t *ihm, char *logStr, int offset)
 {
   if (ihm != NULL)
-    {
-      move(LOG_Y, 0);
-      clrtoeol();
-      mvprintw(LOG_Y, LOG_X, "Log\n------------------");
-
+    {      
+      /* for(int b = 1; b < 12; b++)
+	{
+	  move(LOG_Y + b, LOG_X - 1);
+	  mvprintw(LOG_Y + b, LOG_X - 1, "*");
+	}
+      
+      if (offset > 10)
+	{
+	  COLCOUNT += 1;
+	   offset = 0;
+	}
+      */
       move(LOG_Y + offset, LOG_X);
-      clrtoeol();
+       clrtoeol();
       mvprintw(LOG_Y + offset, LOG_X, logStr);
     }
 }
@@ -349,5 +375,4 @@ void IHM_PrintBattery(IHM_t *ihm, uint8_t percent)
         mvprintw(BATTERY_Y, BATTERY_X, "Battery: %d", percent);
     }
 }
-
 
